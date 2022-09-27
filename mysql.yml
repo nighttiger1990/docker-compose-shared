@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - default
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=luvdev@123##
+      #- MYSQL_RANDOM_ROOT_PASSWORD=true
+      #- MYSQL_ALLOW_EMPTY_PASSWORD=true
+      #- MYSQL_ONETIME_PASSWORD=true
+      #- MYSQL_DATABASE=database-name
+      #- MYSQL_USER=username
+      #- MYSQL_PASSWORD=password
+      #- MYSQL_INITDB_SKIP_TZINFO=true
+
+# Uncomment below when use treafik-balancer.yml in this project
+# networks:
+#   default:
+#     name: treafik
+#     external: true
+#     driver: bridge
+
