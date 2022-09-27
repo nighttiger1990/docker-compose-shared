@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7.0.5-alpine
+    container_name: redis
+    ports:
+      - 6379:6379      
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - default
+  redis-cli:
+    profiles: ["cli"]
+    image: redis:7.0.5-alpine
+    container_name: redis-cli
+    command:
+      - redis-cli 
+    networks:
+      - default
+# Uncomment below when use treafik-balancer.yml in this project
+# networks:
+#   default:
+#     name: treafik
+#     external: true
+#     driver: bridge
+
+#Note:
+#docker-compose up # start main services, no redis-cli
+#docker-compose run --rm redis-cli # run redis-cli service
+#docker-compose --profile cli up # start main and all "cli" services

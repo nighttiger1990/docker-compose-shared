@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  traefik-balancer:
+    image: traefik:v2.8
+    container_name: traefik-balancer
+    command:
+      #- --log.level=DEBUG
+      - --api.insecure=false
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      # Enable below for using Letsencrypt SSL/ Enable in volumes with LetsEncrypt too
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      #- --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory #using Staging Server LetsEnscrypt
+      - --certificatesresolvers.myresolver.acme.email=your-email@company.com
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      # End of section
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.rule=Host(`yourdomain.com`)
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.entrypoints=web
+      # Enable redirect from http to https when access Dashboard
+      #- traefik.http.routers.dashboard.middlewares=to-https
+      #- traefik.http.middlewares.to-https.redirectscheme.scheme=https
+      # End of section
+      # Enable below for using Secure Mode Dashboard
+      #- traefik.http.routers.dashboard-secure.rule=Host(`yourdomain.com`)
+      #- traefik.http.routers.dashboard-secure.service=api@internal
+      #- traefik.http.routers.dashboard-secure.tls=true
+      #- traefik.http.routers.dashboard-secure.tls.certresolver=myresolver
+      # End section
+      # Uncomment below line for add Basic Authentication when access Dashboard
+      #- traefik.http.routers.dashboard.middlewares=auth
+      #- traefik.http.middlewares.auth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/,test2:$$apr1$$d9hr9HBB$$4HxwgUir3HP4EsggP/QNo # test:test | test2:test2
+      # End of section
+    ports:
+      - 80:80
+      - 443:443
+      #- 8080:8080 # --api.insecure=true Dashboard will expose at 8080 in container
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Enable below for using Letsencrypt SSL
+      #- /home/ubuntu/letsencrypt:/letsencrypt
+    restart: always
+    networks:
+      - default
+networks:
+  default:
+    name: traefik
+    driver: bridge
