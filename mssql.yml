@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    ports:
+      - 1433:1433
+    volumes:
+      - "mssql-data:/var/opt/mssql"
+    networks:
+      - default
+    restart: always
+    environment:
+      # For a complete list of environment variables that can be used, refer to the documentation https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-configure-environment-variables?view=sql-server-2017.
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=luvdev@123##
+      # MSSQL_PID is the Product ID (PID) or Edition that the container will run with. Acceptable values:
+      #   Developer : This will run the container using the Developer Edition (this is the default if no MSSQL_PID environment variable is supplied)
+      #   Express : This will run the container using the Express Edition
+      #   Standard : This will run the container using the Standard Edition
+      #   Enterprise : This will run the container using the Enterprise Edition
+      #   EnterpriseCore : This will run the container using the Enterprise Edition Core
+      - MSSQL_PID=Express
+volumes:
+  mssql-data:
+
+# Uncomment below when use treafik-balancer.yml in this project
+# networks:
+#   default:
+#     name: treafik
+#     external: true
+#     driver: bridge
+
