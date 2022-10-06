@@ -1,5 +1,5 @@
 version: '3.9'
-
+name: redis
 services:
   redis:
     image: redis:7.0.5-alpine
@@ -18,10 +18,10 @@ services:
       - redis-cli 
     networks:
       - default
-# Uncomment below when use treafik-balancer.yml in this project
+# Uncomment below when use traefik-balancer.yml in this project
 # networks:
 #   default:
-#     name: treafik
+#     name: traefik
 #     external: true
 #     driver: bridge
 

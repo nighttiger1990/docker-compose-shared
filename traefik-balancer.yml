@@ -1,5 +1,5 @@
 version: '3.9'
-
+name: traefik-balancer
 services:
   traefik-balancer:
     image: traefik:v2.8
@@ -12,10 +12,10 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       # Enable below for using Letsencrypt SSL/ Enable in volumes with LetsEncrypt too
-      - --certificatesresolvers.myresolver.acme.tlschallenge=true
-      #- --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory #using Staging Server LetsEnscrypt
-      - --certificatesresolvers.myresolver.acme.email=your-email@company.com
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencryptresolver.acme.tlschallenge=true
+      #- --certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory #using Staging Server LetsEnscrypt
+      - --certificatesresolvers.letsencryptresolver.acme.email=your-email@company.com
+      - --certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json
       # End of section
     labels:
       - traefik.enable=true
@@ -30,7 +30,7 @@ services:
       #- traefik.http.routers.dashboard-secure.rule=Host(`yourdomain.com`)
       #- traefik.http.routers.dashboard-secure.service=api@internal
       #- traefik.http.routers.dashboard-secure.tls=true
-      #- traefik.http.routers.dashboard-secure.tls.certresolver=myresolver
+      #- traefik.http.routers.dashboard-secure.tls.certresolver=letsencryptresolver
       # End section
       # Uncomment below line for add Basic Authentication when access Dashboard
       #- traefik.http.routers.dashboard.middlewares=auth

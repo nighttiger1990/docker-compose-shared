@@ -1,20 +1,22 @@
 version: '3.9'
-
+name: postgresql
 services:
   postgresql:
     image: postgres:14
     container_name: postgresql
     labels:
-      #- traefik.enable=true
-      #- traefik.http.routers.postgresql.rule=Host(`yourdomain.com`)
-      #- traefik.http.services.postgresql-service.loadbalancer.server.port=5432
+      - traefik.enable=false
+      #- traefik.tcp.routers.postgresql.rule=HostSNI(`*`)
+      #- traefik.tcp.services.postgresql.loadBalancer.server.port=5432
+      #- traefik.tcp.routers.postgresql.tls=false
+      #- traefik.tcp.routers.postgresql.entrypoints=web
       ## Enable redirect from http to https when access Dashboard
-      #- traefik.http.routers.postgresql.middlewares=to-https
-      #- traefik.http.middlewares.to-https.redirectscheme.scheme=https
+      #- traefik.tcp.routers.postgresql.middlewares=to-https
+      #- traefik.tcp.middlewares.to-https.redirectscheme.scheme=https
       ## Enable below for using Secure Mode Dashboard
-      #- traefik.http.routers.postgresql-secure.rule=Host(`yourdomain.com`)
-      #- traefik.http.routers.postgresql-secure.tls=true
-      #- traefik.http.routers.postgresql-secure.tls.certresolver=myresolver
+      #- traefik.tcp.routers.postgresql-secure.rule=Host(`yourdomain.com`)
+      #- traefik.tcp.routers.postgresql-secure.tls=true
+      #- traefik.tcp.routers.postgresql-secure.tls.certresolver=letsencryptresolver
     ports:
       - 5432:5432
     volumes:
@@ -39,10 +41,10 @@ services:
       - 8080:8080
      
 
-# Uncomment below when use treafik-balancer.yml in this project
+# Uncomment below when use traefik-balancer.yml in this project
 # networks:
 #   default:
-#     name: treafik
+#     name: traefik
 #     external: true
 #     driver: bridge
 
