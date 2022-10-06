@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  postgresql:
+    image: postgres:14
+    container_name: postgresql
+    labels:
+      #- traefik.enable=true
+      #- traefik.http.routers.postgresql.rule=Host(`yourdomain.com`)
+      #- traefik.http.services.postgresql-service.loadbalancer.server.port=5432
+      ## Enable redirect from http to https when access Dashboard
+      #- traefik.http.routers.postgresql.middlewares=to-https
+      #- traefik.http.middlewares.to-https.redirectscheme.scheme=https
+      ## Enable below for using Secure Mode Dashboard
+      #- traefik.http.routers.postgresql-secure.rule=Host(`yourdomain.com`)
+      #- traefik.http.routers.postgresql-secure.tls=true
+      #- traefik.http.routers.postgresql-secure.tls.certresolver=myresolver
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgresql-data:/var/lib/postgresql/data
+    networks:
+      - default
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=luvdev@123##
+      #- POSTGRES_USER=postgres # If it is not specified, default user 'postgres'
+      #- POSTGRES_DB=postgres # If it is not specified, then the value of POSTGRES_USER will be used.
+      #- POSTGRES_INITDB_ARGS=--data-checksums
+      #- POSTGRES_INITDB_WALDIR=
+      #- POSTGRES_HOST_AUTH_METHOD=
+      #- PGDATA= # The default is /var/lib/postgresql/data
+      
+  adminer:
+    profiles: ["adminer"]
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+     
+
+# Uncomment below when use treafik-balancer.yml in this project
+# networks:
+#   default:
+#     name: treafik
+#     external: true
+#     driver: bridge
+
+#Note:
+#docker-compose up # start main services, no adminer
+#docker-compose run --rm adminer # run adminer service
+#docker-compose --profile adminer up # start main and all "adminer" services
+
+# More info https://hub.docker.com/_/postgres
