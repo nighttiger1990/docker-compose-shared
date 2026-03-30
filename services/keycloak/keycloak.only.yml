@@ -7,9 +7,8 @@ services:
     command: start-dev
     environment:
       # Admin user
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # Database config
       KC_DB: postgres
       KC_DB_URL_HOST: postgres
@@ -19,12 +18,12 @@ services:
       KC_DB_PASSWORD: keycloak
 
       # Host config (fix redirect issues)
-      KC_HOSTNAME: localhost
-      KC_HOSTNAME_PORT: 8080
+      # KC_HOSTNAME: localhost
+      # KC_HOSTNAME_PORT: 8080
 
       # Dev mode
-      KC_HTTP_ENABLED: "true"
-      KC_PROXY: edge
+      # KC_HTTP_ENABLED: "true"
+      # KC_PROXY: edge
 
     ports:
       - "8080:8080"
