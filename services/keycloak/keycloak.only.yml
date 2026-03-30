@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    restart: unless-stopped
+    command: start-dev
+    environment:
+      # Admin user
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+      # Database config
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+
+      # Host config (fix redirect issues)
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+
+      # Dev mode
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY: edge
+
+    ports:
+      - "8080:8080"

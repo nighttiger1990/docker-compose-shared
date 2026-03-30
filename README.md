@@ -12,7 +12,8 @@ services:
     # ...
 ```
 ```bash
-docker-compose up # start main services, no npm
-docker-compose run --rm npm # run npm service
-docker-compose --profile cli-only up # start main and all "cli-only" services
+docker compose -f <service.yml> up # start all services
+docker compose -f <service.yml> up db # start db services, no client, no npm
+docker compose run --rm npm # run npm service
+docker compose --profile cli-only up # start main and all "cli-only" services
 ```
